@@ -1,0 +1,11 @@
+# 密钥与登录态（绝不能提交）
+config.json
+profile/
+.env
+
+# 运行结果与业务数据（真实企业数据不要上传）
+*.csv
+debug/
+probe_dump.txt
+__pycache__/
+*.pyc
