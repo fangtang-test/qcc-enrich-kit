@@ -7,9 +7,6 @@
 统一社会信用代码、企业地址、所属区县、参保人数、国标行业中类/小类、
 企查查行业中类/小类、企业规模、官网、经营状态。
 
-实测（非 VIP 账号）：信用代码/地址/区县 100%；参保/行业/规模/经营状态 约 88%；
-官网约 47%（多数企业本身未备案）。这 10 个字段基本不依赖 VIP。
-
 ## 快速开始
 
 ```bash
@@ -19,13 +16,15 @@ playwright install chromium          # 或复用已登录的浏览器配置
 # 1) 登录态：把已登录的浏览器用户配置放到 ./profile，或设环境变量
 export QCC_PROFILE_DIR=/path/to/your/logged-in-browser-profile
 
-# 2) 校准（只查 1 家，验证提取规则）
+# 2) 把要查的企业填进 company_list.txt（格式见下方「名单格式」）
+
+# 3) 校准（只查 1 家，验证提取规则）
 python qcc_enrich.py --probe
 
-# 3) 批量补采
-python qcc_enrich.py --file=company_list.txt --out=custom_result.csv
+# 4) 批量补采
+python qcc_enrich.py            # 默认读 company_list.txt，结果写 qcc_补采结果.csv
 
-# 4) AI 审核（DeepSeek）
+# 5) AI 审核（DeepSeek）
 export DEEPSEEK_API_KEY=sk-xxxxxx     # 或复制 config.example.json 为 config.json 填 key
 python ai_audit.py --file=custom_result.csv --out=ai_review.csv
 ```

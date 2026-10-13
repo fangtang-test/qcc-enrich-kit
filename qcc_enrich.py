@@ -16,11 +16,11 @@
 
   2) 批量补采（按每日额度分批，支持断点续跑）：
      run_enrich.bat --limit=50          # 本次只查 50 家
-     run_enrich.bat --limit=50 --file=待查_全量454家.csv
+     run_enrich.bat --limit=50 --file=你的清单.csv
      run_enrich.bat                     # 不限量，跑到完或被风控拦下
 
 常用参数：
-  --file=xxx.csv      企业清单（默认 待查_核心字段缺失.csv，列：序号,企业名称,统一社会信用代码,...）
+  --file=xxx.csv/.txt 企业清单（默认 company_list.txt；csv 列：序号,企业名称,统一社会信用代码）
   --out=xxx.csv       输出文件（默认 qcc_补采_时间戳.csv，重跑同名文件=续跑）
   --limit=N           本次最多查 N 家（配合 VIP 每日额度）
   --probe             校准模式：只查 1 家 + 导出原始文本到 probe_dump.txt
@@ -57,7 +57,7 @@ EDGE_COPY_DIR = HERE / "edge_profile"          # 本目录复制来的登录态�
 LEGACY_PROFILE = LEGACY_DIR / "qcc_profile"    # 老目录：扫码登录态
 LEGACY_EDGE = LEGACY_DIR / "edge_profile"      # 老目录：复制的 Edge 登录态
 
-LIST_FILE = HERE / "待查_核心字段缺失.csv"
+LIST_FILE = HERE / "company_list.txt"         # 默认清单（一行一家 txt；不存在会自动生成模板）
 HOME_URL = "https://www.qcc.com/"
 
 # 输出列顺序：先「可用数据」，后「审核/诊断」，
@@ -838,7 +838,7 @@ def main():
             log(f"打开首页失败：{str(e).splitlines()[0]}")
 
         if waf_blocked(page):
-            log("! 首页就被 WAF 拦截。建议：重跑 copy_edge_profile.bat 刷新登录态，或稍后再试")
+            log("! 首页就被 WAF 拦截。建议：换个时间再试，或删除 profile/ 目录后重跑 1_先双击我_校准.bat 重新扫码登录")
             if not a["auto"]:
                 wait_enter_or_timeout(">>> 按回车继续尝试（20秒后自动继续）... ")
 
